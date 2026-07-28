@@ -1,0 +1,64 @@
+# Default utilizado -> KV secrets engine - version 2 (API) | OpenBao:
+# https://openbao.org/api-docs/secret/kv/kv-v2/#configure-the-kv-engine
+
+@BASE_ADDRESS=http://localhost:1337/v1
+@VAULT_TOKEN=1f91d80e-0a03-49b3-b84b-f1de3d172eec
+
+###
+
+# Verificando se o serviço está ativo e saudável
+curl \
+  --header "X-Vault-Token: {{VAULT_TOKEN}}X" \
+  {{BASE_ADDRESS}}/sys/health
+
+###
+
+# Listar secrets existentes
+curl \
+  --request LIST \
+  --header "X-Vault-Token: {{VAULT_TOKEN}}" \
+  {{BASE_ADDRESS}}/secret/metadata/
+
+###
+
+# Criar ou atualizar primeiro secret
+curl \
+  --request POST \
+  --header "X-Vault-Token: {{VAULT_TOKEN}}" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "data": {
+      "username": "admin",
+      "password": "P@ssw0rd123"
+    }
+  }' \
+  {{BASE_ADDRESS}}/secret/data/app/config
+
+###
+
+# Criar ou atualizar segundo secret
+curl \
+  --request POST \
+  --header "X-Vault-Token: {{VAULT_TOKEN}}" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "data": {
+      "api_key": "abc123456789",
+      "endpoint": "https://api.exemplo.com"
+    }
+  }' \
+  {{BASE_ADDRESS}}/secret/data/integracoes/api
+
+###
+
+# Lendo o primeiro secret criado
+curl \
+  --header "X-Vault-Token: {{VAULT_TOKEN}}" \
+  {{BASE_ADDRESS}}/secret/data/app/config
+
+###
+
+# Lendo o segundo secret criado
+curl \
+  --header "X-Vault-Token: {{VAULT_TOKEN}}" \
+  {{BASE_ADDRESS}}/secret/data/integracoes/api

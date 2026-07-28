@@ -1,0 +1,11 @@
+# Docker Image: https://hub.docker.com/r/openbao/openbao
+# OpenBao UI: https://openbao.org/docs/configuration/ui/
+services:
+  openbao:
+    image: openbao/openbao
+    ports:
+      - "1337:1337"
+    environment:
+      BAO_DEV_ROOT_TOKEN_ID: "1f91d80e-0a03-49b3-b84b-f1de3d172eec"
+      BAO_DEV_LISTEN_ADDRESS: "0.0.0.0:1337"
+      BAO_LOCAL_CONFIG: '{"ui": true}'
